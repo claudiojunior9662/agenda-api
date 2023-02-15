@@ -12,9 +12,11 @@ export class ContatoComponent implements OnInit {
 
   formulario = this.fb.group({
     nome: ['', Validators.required],
-    email: ['', Validators.email],
+    email: ['', [Validators.required, Validators.email]],
     // favorito: [false]
   });
+
+  contatos: Contato[] = [];
 
   constructor(protected service: ContatoService, private fb: FormBuilder) { }
 
@@ -23,10 +25,11 @@ export class ContatoComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.formulario.value);
-    // this.service.save(c).subscribe(res => {
-    //   console.log(res);
-    // });
+    const c = new Contato(this.formulario.value.nome!, this.formulario.value.email!);
+    this.service.save(c).subscribe(res => {
+      this.contatos.push(res);
+      console.log(this.contatos);
+    });
   }
 
 }
