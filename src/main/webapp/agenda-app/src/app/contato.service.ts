@@ -16,4 +16,12 @@ export class ContatoService {
   save(contato: Contato): Observable<Contato> {
     return this.http.post<Contato>(this.url, contato);
   }
+
+  list(): Observable<Contato[]> {
+    return this.http.get<Contato[]>(this.url);
+  }
+
+  favorite(contatoId: number): Observable<any> {
+    return this.http.patch(`${this.url}/${contatoId}/favorito`, null);
+  }
 }

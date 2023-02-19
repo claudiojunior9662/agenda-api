@@ -35,9 +35,9 @@ public class ContatoController {
     }
 
     @PatchMapping("{id}/favorito")
-    public void favorite(@PathVariable Integer id, @RequestBody Boolean favorito) {
+    public void favorite(@PathVariable Integer id) {
         contatoRepository.findById(id).map(contato -> {
-           contato.setFavorito(favorito);
+           contato.setFavorito(!(contato.getFavorito() == Boolean.TRUE));
            return contato;
         }).map(contatoRepository::save)
         .orElseThrow(() -> new ServiceException("Contato não encontrado."));

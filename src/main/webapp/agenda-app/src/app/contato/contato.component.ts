@@ -17,11 +17,34 @@ export class ContatoComponent implements OnInit {
   });
 
   contatos: Contato[] = [];
+  colunas = ['id', 'nome', 'email', 'favorito']
 
   constructor(protected service: ContatoService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    // todo
+    this.listarContatos();
+  }
+
+  listarContatos(): void {
+    this.service.list().subscribe({
+      next: res => {
+        this.contatos = res;
+      },
+      error: err => {
+        // todo appear error message
+      }
+    });
+  }
+
+  favoritar(contato: Contato): void {
+    this.service.favorite(contato.id!).subscribe({
+      next: res => {
+        contato.favorito = !contato.favorito;
+      },
+      error: err => {
+        // todo appear error message
+      }
+    });
   }
 
   submit() {
