@@ -50,8 +50,8 @@ export class ContatoComponent implements OnInit {
   submit() {
     const c = new Contato(this.formulario.value.nome!, this.formulario.value.email!);
     this.service.save(c).subscribe(res => {
-      this.contatos.push(res);
-      console.log(this.contatos);
+      const newList: Contato[] = [... this.contatos, res];
+      this.contatos = newList;
     });
   }
 
