@@ -2,11 +2,16 @@ package io.github.claudiojunior9662.agendaapi.model.api.rest;
 
 import io.github.claudiojunior9662.agendaapi.model.entity.Contato;
 import io.github.claudiojunior9662.agendaapi.model.repository.ContatoRepository;
+import jakarta.servlet.http.Part;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 @RestController
@@ -41,5 +46,22 @@ public class ContatoController {
            return contato;
         }).map(contatoRepository::save)
         .orElseThrow(() -> new ServiceException("Contato não encontrado."));
+    }
+
+    @PutMapping("{id}/foto")
+    public byte[] addPhoto(@PathVariable Integer id, @RequestParam("foto") Part file) {
+        return contatoRepository.findById(id).map(c -> {
+           try {
+               InputStream is = file.getInputStream();
+               byte[] bytes = new byte[(int) file.getSize()];
+               IOUtils.readFully(is, bytes);
+               c.setFoto(bytes);
+               contatoRepository.save(c);
+               is.close();
+               return bytes;
+           }catch (IOException e) {
+                return null;
+           }
+        }).orElseThrow(() -> new ServiceException("Contato não encontrado."));
     }
 }

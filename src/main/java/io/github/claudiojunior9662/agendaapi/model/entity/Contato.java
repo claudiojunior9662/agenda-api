@@ -18,5 +18,8 @@ public class Contato {
     private String email;
     @Column
     private Boolean favorito;
+    @Column
+    @Lob
+    private byte[] foto;
 
 }
