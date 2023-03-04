@@ -24,4 +24,8 @@ export class ContatoService {
   favorite(contatoId: number): Observable<any> {
     return this.http.patch(`${this.url}/${contatoId}/favorito`, null);
   }
+
+  upload(contato: Contato, formData: FormData): Observable<any> {
+    return this.http.put(`${this.url}/${contato.id}/foto`, formData);
+  }
 }

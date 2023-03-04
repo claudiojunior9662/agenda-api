@@ -17,7 +17,7 @@ export class ContatoComponent implements OnInit {
   });
 
   contatos: Contato[] = [];
-  colunas = ['id', 'nome', 'email', 'favorito']
+  colunas = ['foto', 'id', 'nome', 'email', 'favorito']
 
   constructor(protected service: ContatoService, private fb: FormBuilder) { }
 
@@ -55,4 +55,15 @@ export class ContatoComponent implements OnInit {
     });
   }
 
+  uploadFoto(event: any, contato: Contato){
+    const files = event.target.files;
+    if(files){
+      const foto = files[0];
+      const formData: FormData = new FormData();
+      formData.append('foto', files[0]);
+      this.service.upload(contato, formData).subscribe(res => {
+        this.listarContatos();
+      });
+    }
+  }
 }
