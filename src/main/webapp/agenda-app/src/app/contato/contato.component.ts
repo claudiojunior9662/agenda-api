@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ContatoService } from '../contato.service';
 import { Contato } from './contato';
+import { MatDialog } from '@angular/material/dialog';
+import { ContatoDetalheComponent } from '../contato-detalhe/contato-detalhe.component';
 
 @Component({
   selector: 'app-contato',
@@ -19,7 +21,7 @@ export class ContatoComponent implements OnInit {
   contatos: Contato[] = [];
   colunas = ['foto', 'id', 'nome', 'email', 'favorito']
 
-  constructor(protected service: ContatoService, private fb: FormBuilder) { }
+  constructor(protected service: ContatoService, private fb: FormBuilder, protected dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.listarContatos();
@@ -65,5 +67,13 @@ export class ContatoComponent implements OnInit {
         this.listarContatos();
       });
     }
+  }
+
+  visualizarContato(contato: Contato): void {
+    this.dialog.open(ContatoDetalheComponent, {
+      width: '400px',
+      height: '550px',
+      data: contato
+    });
   }
 }
