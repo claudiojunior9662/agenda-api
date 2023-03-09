@@ -44,6 +44,8 @@
       <tr mat-header-row *matHeaderRowDef="colunas"></tr>
       <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
     </table>
+
+    <mat-paginator [length]="totalElements" [pageSize]="size" [pageSizeOptions]="pageSizeOptions" (page)="listarContatos($event)"></mat-paginator>
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
@@ -58,7 +60,7 @@
           <mat-label>Nome</mat-label>
           <input formControlName="nome" matInput placeholder="Digite o nome"/>
         </mat-form-field>
-        <div *ngIf="formulario.controls.nome.errors">
+        <div *ngIf="formulario.controls.nome.errors && !formulario.controls.nome.pristine">
           <span class="text-danger fs-8" *ngIf="formulario.controls.nome.errors['required']">O nome é obrigatório</span>
         </div>
 
@@ -66,7 +68,7 @@
           <mat-label>Email</mat-label>
           <input formControlName="email" matInput placeholder="Digite o seu email"/>
         </mat-form-field>
-        <div *ngIf="formulario.controls.email.errors">
+        <div *ngIf="formulario.controls.email.errors && !formulario.controls.email.pristine">
           <span class="text-danger fs-8" *ngIf="formulario.controls.email.errors['required']">O email é obrigatório</span>
           <span class="text-danger fs-8" *ngIf="formulario.controls.email.errors['email']">O email digitado é inválido</span>
         </div>

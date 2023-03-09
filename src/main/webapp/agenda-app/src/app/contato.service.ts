@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Contato } from './contato/contato';
+import { PaginaContato } from './contato/paginaContato';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +18,8 @@ export class ContatoService {
     return this.http.post<Contato>(this.url, contato);
   }
 
-  list(): Observable<Contato[]> {
-    return this.http.get<Contato[]>(this.url);
+  list(page: number, size: number): Observable<PaginaContato> {
+    return this.http.get<PaginaContato>(this.url, { params: { page: page.toString(), size: size.toString() } });
   }
 
   favorite(contatoId: number): Observable<any> {

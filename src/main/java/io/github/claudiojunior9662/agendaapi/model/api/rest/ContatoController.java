@@ -6,6 +6,9 @@ import jakarta.servlet.http.Part;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.hibernate.service.spi.ServiceException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +38,12 @@ public class ContatoController {
     }
 
     @GetMapping
-    public List<Contato> list() {
-        return contatoRepository.findAll();
+    public Page<Contato> list(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size
+    ) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "nome");
+        return contatoRepository.findAll(PageRequest.of(page, size, sort));
     }
 
     @PatchMapping("{id}/favorito")

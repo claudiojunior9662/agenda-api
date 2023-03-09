@@ -18,6 +18,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ContatoComponent } from './contato/contato.component';
 import { ContatoService } from './contato.service';
 import { ContatoDetalheComponent } from './contato-detalhe/contato-detalhe.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { ContatoDetalheComponent } from './contato-detalhe/contato-detalhe.compo
     MatTableModule,
     MatCardModule,
     MatDialogModule,
+    MatPaginatorModule,
+    MatSnackBarModule,
     HttpClientModule,
     ReactiveFormsModule
   ],

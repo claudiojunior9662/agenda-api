@@ -4,6 +4,8 @@ import { ContatoService } from '../contato.service';
 import { Contato } from './contato';
 import { MatDialog } from '@angular/material/dialog';
 import { ContatoDetalheComponent } from '../contato-detalhe/contato-detalhe.component';
+import { PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-contato',
@@ -21,16 +23,27 @@ export class ContatoComponent implements OnInit {
   contatos: Contato[] = [];
   colunas = ['foto', 'id', 'nome', 'email', 'favorito']
 
-  constructor(protected service: ContatoService, private fb: FormBuilder, protected dialog: MatDialog) { }
+  totalElements = 0;
+  page = 0;
+  size = 10;
+  pageSizeOptions: number[] = [10]
+
+  constructor(protected service: ContatoService, private fb: FormBuilder, protected dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.listarContatos();
   }
 
-  listarContatos(): void {
-    this.service.list().subscribe({
+  listarContatos(event?: PageEvent): void {
+    if(event) {
+      this.page = event.pageIndex;
+      this.size = event.pageSize;
+    }
+    this.service.list(this.page, this.size).subscribe({
       next: res => {
-        this.contatos = res;
+        this.contatos = res.content ?? [];
+        this.totalElements = res.totalElements ?? 0;
+        this.page = res.number ?? 0;
       },
       error: err => {
         // todo appear error message
@@ -52,8 +65,9 @@ export class ContatoComponent implements OnInit {
   submit() {
     const c = new Contato(this.formulario.value.nome!, this.formulario.value.email!);
     this.service.save(c).subscribe(res => {
-      const newList: Contato[] = [... this.contatos, res];
-      this.contatos = newList;
+      this.listarContatos();
+      this.snackBar.open('Contato adicionado com sucesso', 'Sucesso', {duration: 2000});
+      this.formulario.reset();
     });
   }
 
